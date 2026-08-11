@@ -1,0 +1,24 @@
+[project]
+name = "inventory-app"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Roman Kotov",email = "RomanKotov@users.noreply.github.com"}
+]
+license = "MIT"
+requires-python = ">=3.14"
+dependencies = [
+    "django (>=6.1,<7.0)",
+    "pillow (>=12.3.0,<13.0.0)"
+]
+
+[dependency-groups]
+dev = [
+    "ipdb (>=0.13.13,<0.14.0)",
+    "django-debug-toolbar (>=7.1.0,<8.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
