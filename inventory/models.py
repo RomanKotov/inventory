@@ -1,7 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.contrib import admin
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 
@@ -39,6 +41,10 @@ class BaseModel(models.Model):
         default=Status.ACTIVE
     )
 
+    @admin.display(description=_("active"), boolean=True)
+    def is_active(self):
+        return self.status == Status.ACTIVE
+
 
 class Photo(BaseModel):
     image = models.ImageField(
@@ -49,6 +55,21 @@ class Photo(BaseModel):
         _("last used"),
         auto_now_add=True
     )
+
+    @admin.display(description=_("preview"))
+    def preview(self):
+        return format_html(
+            ('<img src="{}" style="max-width: 5em; '
+             'max-height: 5em; border: 0.1px solid black;">'),
+            self.image.url
+        )
+
+    @admin.display(description=_("preview"))
+    def large_preview(self):
+        return format_html(
+            '<img src="{}" style="border: 0.1px solid black;>',
+            self.image.url
+        )
 
 
 class Tag(BaseModel):
@@ -63,6 +84,9 @@ class Tag(BaseModel):
         default=TagType.INFO
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Location(BaseModel):
     name = models.CharField(
@@ -70,27 +94,8 @@ class Location(BaseModel):
         max_length=255,
     )
 
-
-class LocationHistory(BaseModel):
-    location = models.ForeignKey(
-        Location,
-        verbose_name=_("location"),
-        on_delete=models.PROTECT,
-    )
-    inventory_item = models.ForeignKey(
-        'InventoryItem',
-        verbose_name=_("inventory item"),
-        on_delete=models.PROTECT,
-    )
-    created_at = models.DateTimeField(
-        _("created_at"),
-        auto_now_add=True
-    )
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name=_("author"),
-        on_delete=models.PROTECT,
-    )
+    def __str__(self):
+        return self.name
 
 
 class InventoryOwner(BaseModel):
@@ -99,6 +104,9 @@ class InventoryOwner(BaseModel):
         max_length=150,
         help_text=_("Name of inventory owner")
     )
+
+    def __str__(self):
+        return self.fullname
 
 
 class InventoryGroup(BaseModel):
@@ -112,6 +120,9 @@ class InventoryGroup(BaseModel):
         on_delete=models.PROTECT,
     )
 
+    def __str__(self):
+        return self.name
+
 
 class InventoryItem(BaseModel):
     group = models.ForeignKey(
@@ -123,14 +134,18 @@ class InventoryItem(BaseModel):
         Photo,
         verbose_name=_("photo"),
         on_delete=models.PROTECT,
+        blank=True,
         null=True,
     )
     tags = models.ManyToManyField(
         Tag,
+        blank=True,
         verbose_name=_("tags"),
     )
     location = models.ForeignKey(
         Location,
+        blank=True,
+        null=True,
         verbose_name=_("location"),
         on_delete=models.PROTECT,
     )
@@ -155,9 +170,41 @@ class InventoryItem(BaseModel):
         max_length=255,
     )
 
+    def __str__(self):
+        return self.name
+
+
+class LocationHistory(BaseModel):
+    class Meta:
+        verbose_name = _("Location history")
+        verbose_name_plural = _("Location histories")
+
+    location = models.ForeignKey(
+        Location,
+        verbose_name=_("location"),
+        on_delete=models.PROTECT,
+    )
+    inventory_item = models.ForeignKey(
+        InventoryItem,
+        verbose_name=_("inventory item"),
+        on_delete=models.PROTECT,
+    )
+    created_at = models.DateTimeField(
+        _("created at"),
+        auto_now_add=True
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("author"),
+        on_delete=models.PROTECT,
+    )
+
+    def __str__(self):
+        return self.location.name
+
 
 class Comment(BaseModel):
-    name = models.TextField(
+    text = models.TextField(
         _("text"),
         max_length=255,
     )
