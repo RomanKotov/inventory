@@ -4,8 +4,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 
-STATUS_SIZE = 10
-
 
 class TagType(models.TextChoices):
     PRIMARY = "primary", _("Primary")
@@ -23,7 +21,19 @@ class Status(models.TextChoices):
     ARCHIVE = "ARCHIVE", _("ARCHIVE")
 
 
-class Photo(models.Model):
+class BaseModel(models.Model):
+    class Meta:
+        abstract = True
+
+    status = models.CharField(
+        _("status"),
+        max_length=10,
+        choices=Status,
+        default=Status.ACTIVE
+    )
+
+
+class Photo(BaseModel):
     image = models.ImageField(
         _("image"),
         upload_to="images/"
@@ -32,15 +42,9 @@ class Photo(models.Model):
         _("last used"),
         auto_now_add=True
     )
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
 
 
-class Tag(models.Model):
+class Tag(BaseModel):
     name = models.CharField(
         _("name"),
         max_length=20,
@@ -51,28 +55,16 @@ class Tag(models.Model):
         choices=TagType,
         default=TagType.INFO
     )
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
 
 
-class Location(models.Model):
+class Location(BaseModel):
     name = models.CharField(
         _("name"),
         max_length=255,
     )
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
 
 
-class LocationHistory(models.Model):
+class LocationHistory(BaseModel):
     location = models.ForeignKey(
         Location,
         verbose_name=_("location"),
@@ -92,29 +84,17 @@ class LocationHistory(models.Model):
         verbose_name=_("author"),
         on_delete=models.PROTECT,
     )
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
 
 
-class InventoryOwner(models.Model):
+class InventoryOwner(BaseModel):
     fullname = models.CharField(
         _("fullname"),
         max_length=150,
         help_text=_("Name of inventory owner")
     )
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
 
 
-class InventoryGroup(models.Model):
+class InventoryGroup(BaseModel):
     name = models.CharField(
         _("name"),
         max_length=255,
@@ -124,15 +104,9 @@ class InventoryGroup(models.Model):
         verbose_name=_("owner"),
         on_delete=models.PROTECT,
     )
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
 
 
-class InventoryItem(models.Model):
+class InventoryItem(BaseModel):
     group = models.ForeignKey(
         InventoryGroup,
         verbose_name=_("group"),
@@ -173,15 +147,9 @@ class InventoryItem(models.Model):
         _("name"),
         max_length=255,
     )
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
 
 
-class Comment(models.Model):
+class Comment(BaseModel):
     name = models.TextField(
         _("text"),
         max_length=255,
@@ -208,9 +176,3 @@ class Comment(models.Model):
         _("object id"),
     )
     content_object = GenericForeignKey("entity", "object_id")
-    status = models.CharField(
-        _("status"),
-        max_length=STATUS_SIZE,
-        choices=Status,
-        default=Status.ACTIVE
-    )
