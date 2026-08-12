@@ -21,10 +21,17 @@ class Status(models.TextChoices):
     ARCHIVE = "ARCHIVE", _("ARCHIVE")
 
 
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Status.ACTIVE)
+
+
 class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+    objects = models.Manager()
+    active = ActiveManager()
     status = models.CharField(
         _("status"),
         max_length=10,
