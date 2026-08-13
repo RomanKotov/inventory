@@ -13,6 +13,7 @@ Simple inventory tracking solution.
 1. Clone project.
 1. Install Python dependencies: `poetry install`
 1. Run migrations: `poetry run ./manage.py migrate`
+1. generate fake data (optional): `poetry run ./manage.py seed`
 1. Create super user: `poetry run ./manage.py createsuperuser`
 1. Start development server: `poetry run ./manage.py runserver`
 1. Visit site admin: [http://localhost:8000/admin](http://localhost:8000/admin) and log in with credentials you have created. Otherwise you can visit site: [http://localhost:8000](http://localhost:8000).
@@ -26,3 +27,4 @@ You can launch commands from this section with `poetry run ./manage.py {command}
 - `makemigrations` - create new migrations to match database structure from the code.
 - `migrate` - update database to the newest version.
 - `shell` - launch Python shell with context of the application. You can use all your code and installed dependencies here.
+- `seed` - generate fake data for testing.
