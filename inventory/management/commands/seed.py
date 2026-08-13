@@ -65,11 +65,11 @@ class Command(BaseCommand):
             self.log("inventory location", params)
 
     def generate_tags(self):
-        tags_needed = MIN_TAGS - m.Location.objects.count()
+        tags_needed = MIN_TAGS - m.Tag.objects.count()
         tags_needed = max(0, tags_needed)
         for _ in range(tags_needed):
             params = {"name": FAKE.cryptocurrency_code()}
-            m.Location.objects.create(**params)
+            m.Tag.objects.create(**params)
             self.log("tag", params)
 
     def generate_inventory_group(self, owner):
@@ -97,6 +97,7 @@ class Command(BaseCommand):
 
             self.generate_location_history(item)
             self.generate_comments(item)
+            self.maybe_attach_tags(item)
 
     def generate_location_history(self, item):
         history_items = random.randint(
@@ -131,3 +132,9 @@ class Command(BaseCommand):
             }
             m.Comment.objects.create(**params)
             self.log("comment", params)
+
+    def maybe_attach_tags(self, item):
+        tags = random.randint(0, 2)
+        for _ in range(tags):
+            tag = m.Tag.objects.order_by('?').first()
+            item.tags.add(tag)
