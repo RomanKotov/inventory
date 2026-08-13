@@ -22,6 +22,8 @@ class InventoryGroupAdmin(admin.ModelAdmin):
 
 @admin.register(m.InventoryItem)
 class InventoryItemAdmin(admin.ModelAdmin):
+    fields = ('name', 'inventory_number', 'serial_number', 'quantity',
+              'location', 'group', 'photo', 'tags', 'status')
     list_display = ('name', 'inventory_number',
                     'serial_number', 'quantity', 'is_active')
 
@@ -58,9 +60,11 @@ class LocationHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(m.Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'is_active', 'preview')
+    list_display = ('id', 'is_active', 'preview', 'last_used')
     fields = ('image', 'large_preview', 'status')
     readonly_fields = ('large_preview',)
+    date_hierarchy = 'last_used'
+    ordering = ('-last_used',)
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -77,7 +81,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(m.Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'entity', 'author',
+    list_display = ('__str__', 'entity', 'object_url', 'author',
                     'created_at', 'changed_at', 'is_active')
     fields = ('text', 'entity', 'object_id', 'author',
               'created_at', 'changed_at', 'status')

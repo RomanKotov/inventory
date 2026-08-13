@@ -6,6 +6,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from inventory_auth.url_helpers import generic_admin_object_url
+
 
 class TagType(models.TextChoices):
     PRIMARY = "primary", _("Primary")
@@ -230,3 +232,14 @@ class Comment(BaseModel):
         _("object id"),
     )
     content_object = GenericForeignKey("entity", "object_id")
+
+    def __str__(self):
+        max_size = 15
+        if len(self.text) < max_size:
+            return self.text
+
+        return self.text[:max_size] + "..."
+
+    @admin.display(description=_("object url"))
+    def object_url(self):
+        return generic_admin_object_url(self.entity, self.object_id)
