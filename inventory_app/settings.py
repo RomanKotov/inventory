@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 if DEBUG:
     INSTALLED_APPS.extend([
         "debug_toolbar",
+        "django_extensions"
     ])
 
 MIDDLEWARE = [
