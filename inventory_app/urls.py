@@ -21,7 +21,10 @@ from django.urls import path
 
 from debug_toolbar.toolbar import debug_toolbar_urls
 
+import inventory.views as v
+
 urlpatterns = [
+    path("", v.index, name="index"),
     path(f'{settings.INVENTORY_ADMIN_URL_PREFIX}/', admin.site.urls),
 ]
 

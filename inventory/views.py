@@ -1,3 +1,8 @@
+from django.contrib import messages
 from django.shortcuts import render
 
-# Create your views here.
+
+def index(request):
+    messages.success(request, "Hello, world!")
+
+    return render(request, "inventory/index.html", {})
