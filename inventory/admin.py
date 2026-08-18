@@ -53,6 +53,7 @@ class LocationHistoryAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('created_at',)
     date_hierarchy = 'created_at'
+    list_select_related = ("location", "inventory_item")
 
     def has_delete_permission(self, request, obj=None):
         return False

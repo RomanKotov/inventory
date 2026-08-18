@@ -24,6 +24,7 @@ class AuditLogAdmin(admin.ModelAdmin):
     list_display_links = None
     search_fields = ('object_repr', 'object_id', 'change_message')
     date_hierarchy = 'action_time'
+    list_select_related = ("user", "content_type")
 
     def has_add_permission(self, request):
         return False
