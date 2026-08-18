@@ -28,3 +28,7 @@ You can launch commands from this section with `poetry run ./manage.py {command}
 - `migrate` - update database to the newest version.
 - `shell` - launch Python shell with context of the application. You can use all your code and installed dependencies here.
 - `seed` - generate fake data for testing.
+
+## Environment variables
+
+- `INVENTORY_ADMIN_URL_PREFIX` - changes prefix of admin site. Default is "admin".

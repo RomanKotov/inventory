@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+from os import getenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -154,3 +155,11 @@ MAILERS = {
 # Auth
 
 AUTH_USER_MODEL = 'inventory_auth.User'
+
+
+# custom_config
+
+INVENTORY_ADMIN_URL_PREFIX = getenv(
+        'INVENTORY_ADMIN_URL_PREFIX',
+        'admin'
+)
