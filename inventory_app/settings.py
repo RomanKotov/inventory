@@ -71,10 +71,22 @@ if DEBUG:
 
 ROOT_URLCONF = 'inventory_app.urls'
 
+TEMPLATE_BUITINS = [
+    'django_bootstrap5.templatetags.django_bootstrap5',
+    'django.templatetags.i18n',
+]
+
+if DEBUG:
+    TEMPLATE_BUITINS.extend([
+        "django_extensions.templatetags.debugger_tags",
+    ])
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,6 +94,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'builtins': TEMPLATE_BUITINS
         },
     },
 ]
@@ -156,11 +169,13 @@ MAILERS = {
 # Auth
 
 AUTH_USER_MODEL = 'inventory_auth.User'
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
 
 
 # custom_config
 
 INVENTORY_ADMIN_URL_PREFIX = getenv(
-        'INVENTORY_ADMIN_URL_PREFIX',
-        'admin'
+    'INVENTORY_ADMIN_URL_PREFIX',
+    'admin'
 )
