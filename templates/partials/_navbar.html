@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-md ms-auto bg-secondary bg-opacity-25">
+  <div class="container-fluid">
+    {% if user.is_authenticated %}
+    <a class="navbar-brand" href="{% url 'home' %}">🏠</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#app-navbar"
+      aria-controls="app-navbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="app-navbar">
+      <ul class="navbar-nav">
+        {% for link in navbar_links %}
+          <li class="nav-item">
+            <a 
+              class="nav-link {% if link.active %}active{% endif %}"
+              {% if link.active %} aria-current="page" {% endif %}
+              href="{{ link.href }}"
+            >
+              {{ link.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="navbar-nav ms-auto">
+        <div class="navbar-text me-1">
+          {% firstof user.get_short_name user.get_username as username %}
+          {% translate 'Welcome,' %}
+          <strong title="{{username}}">{{ username|truncatechars:20 }}</strong>
+        </div>
+        <form id="logout-form" method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <div class="btn-group">
+            {% if user.has_usable_password %}
+              <a class="btn btn-primary" href="{% url 'password_change' %}">
+                {% translate 'Change password' %}
+              </a>
+            {% endif %}
+            <button class="btn btn-danger" type="submit">
+              {% translate 'Log out' %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="navbar-text">
+    You are not logged in
+  </div>
+  <a class="btn btn-success" href="{% url 'login' %}">{% translate "Log In" %}</a>
+  {% endif %}
+</nav>
