@@ -24,32 +24,32 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 
 import inventory.views as v
 
+rp = settings.ROUTE_PREFIXES
+
 urlpatterns = [
     path("", v.index, name="home"),
     path(
-        "accounts/login/",
+        f"{rp['accounts']}/login/",
         auth_views.LoginView.as_view(redirect_authenticated_user=True),
         name="login"
     ),
-    path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path(f"{rp['accounts']}/logout/",
+         auth_views.LogoutView.as_view(), name="logout"),
     path(
-        "accounts/password_change/",
+        f"{rp['accounts']}/password_change/",
         auth_views.PasswordChangeView.as_view(),
         name="password_change"
     ),
     path(
-        "accounts/password_change/done/",
+        f"{rp['accounts']}/password_change/done/",
         auth_views.PasswordChangeDoneView.as_view(),
         name="password_change_done"
     ),
-    path(f'{settings.INVENTORY_ADMIN_URL_PREFIX}/', admin.site.urls),
+    path(f'{rp['admin']}/', admin.site.urls),
 ]
 
 if settings.DEBUG:
     urlpatterns += [
-        *debug_toolbar_urls(),
-        *static(
-            settings.MEDIA_URL,
-            document_root=settings.MEDIA_ROOT
-        )
+        *debug_toolbar_urls(prefix=rp['debug']),
+        *static(rp['media'], document_root=settings.MEDIA_ROOT)
     ]

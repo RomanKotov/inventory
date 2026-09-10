@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import re
 from os import getenv
 from pathlib import Path
 
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'inventory.middleware.PermissionCheck',
 ]
 
 if DEBUG:
@@ -175,9 +177,19 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 
-# custom_config
+# Router helpers
 
-INVENTORY_ADMIN_URL_PREFIX = getenv(
-    'INVENTORY_ADMIN_URL_PREFIX',
-    'admin'
+ROUTE_PREFIXES = {
+    "accounts": "accounts",
+    "admin": f"{getenv('INVENTORY_ADMIN_URL_PREFIX', 'admin')}",
+    "static": STATIC_URL,
+    "media": MEDIA_URL,
+    "debug": "__debug__"
+}
+
+ROUTE_PREFIX_REGEX = r"^/?(.*?)/?$"
+
+ROUTES_SKIP_PERMISSION_CHECKS = set(
+    re.sub(ROUTE_PREFIX_REGEX, r'/\1/', ROUTE_PREFIXES[r])
+    for r in ('accounts', 'admin', 'static', 'media', 'debug')
 )
