@@ -1,0 +1,26 @@
+/* THEME SWITCH */
+.theme-toggle {
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: transparent;
+  vertical-align: middle;
+  margin-inline-start: 5px;
+  margin-top: -1px;
+}
+
+.theme-toggle .theme-hide {
+  display: none;
+}
+
+html[data-theme="auto"] .theme-toggle .theme-label-when-auto {
+  display: block;
+}
+
+html[data-theme="dark"] .theme-toggle .theme-label-when-dark {
+  display: block;
+}
+
+html[data-theme="light"] .theme-toggle .theme-label-when-light {
+  display: block;
+}
