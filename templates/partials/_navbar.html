@@ -33,7 +33,7 @@
         <div id="navbar-desktop-dropdown" class="nav-item dropdown d-none d-md-flex">
           {% include "partials/_theme_toggle.html" %}
           <button
-            class="nav-link dropdown-toggle"
+            class="nav-link dropdown-toggle mt-1"
             id="navbarDropdown"
             role="button"
             data-bs-toggle="dropdown"
@@ -55,10 +55,12 @@
     </div>
   </div>
   {% else %}
-    {% include "partials/_theme_toggle.html" %}
-    <div class="ms-auto navbar-text">
-      You are not logged in
+    <div class="ms-auto d-flex align-items-center">
+      {% include "partials/_theme_toggle.html" %}
+      <div class="navbar-text ms-2">
+        You are not logged in
+      </div>
+      <a class="btn btn-success m-2" href="{% url 'login' %}">{% translate "Log In" %}</a>
     </div>
-    <a class="btn btn-success" href="{% url 'login' %}">{% translate "Log In" %}</a>
   {% endif %}
 </nav>
