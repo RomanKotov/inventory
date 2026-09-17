@@ -1,6 +1,12 @@
 {% load i18n %}
 <button class="theme-toggle">
-  <span class="theme-hide theme-label-when-auto">💻{% translate 'Toggle theme (current theme: auto)' %}</span>
-  <span class="theme-hide theme-label-when-light">🌅{% translate 'Toggle theme (current theme: light)' %}</span>
-  <span class="theme-hide theme-label-when-dark">🌒{% translate 'Toggle theme (current theme: dark)' %}</span>
+  <span class="theme-hide theme-label-when-auto" title="{% translate 'Toggle theme (current theme: auto)' %}">
+    <i class="bi bi-circle-half"></i>
+  </span>
+  <span class="theme-hide theme-label-when-light" title="{% translate 'Toggle theme (current theme: light)' %}">
+    <i class="bi bi-sun"></i>
+  </span>
+  <span class="theme-hide theme-label-when-dark" title="{% translate 'Toggle theme (current theme: dark)' %}">
+    <i class="bi bi-moon"></i>
+  </span>
 </button>

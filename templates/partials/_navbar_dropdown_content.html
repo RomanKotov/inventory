@@ -1,0 +1,18 @@
+{% load i18n %}
+<div class="navbar-text">
+  {% firstof user.get_short_name user.get_username as username %}
+  {% translate 'Welcome,' %}
+  <strong title="{{username}}">{{ username|truncatechars:20 }}</strong>
+</div>
+<div class="dropdown-divider"></div>
+<form id="logout-form" method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  {% if user.has_usable_password %}
+    <a class="btn btn-primary d-block" href="{% url 'password_change' %}">
+      {% translate 'Change password' %}
+    </a>
+  {% endif %}
+  <button class="btn btn-danger w-100" type="submit">
+    {% translate 'Log out' %}
+  </button>
+</form>
