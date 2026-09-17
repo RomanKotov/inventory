@@ -110,6 +110,9 @@ class InventoryOwner(BaseModel):
     def __str__(self):
         return self.fullname
 
+    def html_owner_id(self):
+        return f"owner-{self.id}"
+
 
 class InventoryGroup(BaseModel):
     name = models.CharField(

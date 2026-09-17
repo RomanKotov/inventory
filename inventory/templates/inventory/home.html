@@ -3,4 +3,36 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="accordion" id="owner-list">
+{% for owner in owners %}
+  <div class="accordion-item">
+  {% with owner.html_owner_id|add:"-collapse" as collapse_id %}
+    <h2 class="accordion-header">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#{{collapse_id}}"
+        aria-controls="{{collapse_id}}"
+      >
+        {{ owner.fullname }}
+      </button>
+    </h2>
+    <div
+      id="{{collapse_id}}"
+      class="accordion-collapse collapse"
+      data-bs-parent="#owner-list"
+    >
+      <div class="accordion-body">
+        <ul class="list-group">
+          {% for inventory_group in owner.inventorygroup_set.all %}
+            <li class="list-group-item">{{inventory_group}}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endwith %}
+  </div>
+{% endfor %}
+</div>
 {% endblock %}

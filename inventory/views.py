@@ -1,8 +1,15 @@
-from django.contrib import messages
+from django.db.models import Prefetch
 from django.shortcuts import render
+from .models import InventoryOwner, InventoryGroup
 
 
 def index(request):
-    messages.success(request, "Hello, world!")
-
-    return render(request, "inventory/home.html", {})
+    owners = InventoryOwner.active.all().prefetch_related(
+        Prefetch(
+            "inventorygroup_set",
+            queryset=InventoryGroup.active.all()
+        )
+    )
+    return render(request, "inventory/home.html", {
+        "owners": owners
+    })
