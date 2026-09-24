@@ -184,6 +184,7 @@ ROUTE_PREFIXES = {
     "admin": f"{getenv('INVENTORY_ADMIN_URL_PREFIX', 'admin')}",
     "static": STATIC_URL,
     "media": MEDIA_URL,
+    "owner": "owner",
     "debug": "__debug__"
 }
 

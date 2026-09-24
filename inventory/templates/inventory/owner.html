@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory of {{owner.fullname}}{% endblock %}
+
+{% block content %}
+{% for group in groups %}
+<div class="table-responsive mb-5">
+<h2>
+  <span class="badge text-bg-secondary">{{group}}</span>
+</h2>
+<table class="table table-bordered caption-top">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th class="d-none d-md-table-cell">inventory_number</th>
+      <th class="d-none d-md-table-cell">serial_number</th>
+      <th>quantity</th>
+      <th>tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in group.inventoryitem_set.all %}
+    <tr>
+      <td>{{item}}</td>
+      <td class="d-none d-md-table-cell">{{item.inventory_number}}</td>
+      <td class="d-none d-md-table-cell">{{item.serial_number}}</td>
+      <td>{{item.quantity}}</td>
+      <td>
+        {% for tag in item.tags.all %}
+        <span class="badge text-bg-{{tag.type}}">{{tag}}</span>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endfor %}
+{% endblock %}
