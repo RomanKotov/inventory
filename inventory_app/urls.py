@@ -28,7 +28,11 @@ rp = settings.ROUTE_PREFIXES
 
 urlpatterns = [
     path("", v.index, name="home"),
-    path(f"{rp['owner']}/<int:owner_id>/", v.owner, name="owner-page"),
+    path(
+        f"{rp['owner']}/<int:owner_id>/",
+        v.owner_page,
+        name="owner-page"
+    ),
     path(
         f"{rp['accounts']}/login/",
         auth_views.LoginView.as_view(redirect_authenticated_user=True),
