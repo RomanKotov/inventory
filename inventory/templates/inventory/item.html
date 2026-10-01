@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load app_extras %}
+{% block title %}Item {{item.name}}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" aria-current="page">
+      <a  href="{% url 'owner-page' item.group.owner.id %}">
+        {{item.group.owner.fullname}}
+      </a>
+    </li>
+    <li class="breadcrumb-item" aria-current="page">
+      {{item.group.name}}
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      {{item.name}}
+    </li>
+  </ol>
+</nav>
+<h1>
+  {{item.name}}
+  {% for tag in tags %}
+    <span class="badge text-bg-{{tag.type}}">{{tag}}</span>
+  {% endfor %}
+</h1>
+<section class="card" style="width: 18rem;">
+  <img
+    src="{{item.photo.image.url}}"
+    class="card-img-top"
+    alt="Photo of {{item.name}}">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      {% get_verbose_field_name item "inventory_number" %}: {{item.inventory_number}}
+    </li>
+    <li class="list-group-item">
+      {% get_verbose_field_name item "serial_number" %}: {{item.serial_number}}
+    </li>
+    <li class="list-group-item">
+      {% get_verbose_field_name item "quantity" %}: {{item.quantity}}
+    </li>
+    <li class="list-group-item">
+      {% get_verbose_field_name item "location" %}: {{item.location}}
+    </li>
+    <li class="list-group-item">
+      {% get_verbose_field_name item "status" %}: {{item.status}}
+    </li>
+  </ul>
+</section>
+<section>
+  <h2>{% translate "location history" %}</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{% translate "date" %}</th>
+        <th>{% translate "author" %}</th>
+        <th>{% translate "location" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in locations %}
+      <tr>
+        <td>{{ l.created_at|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>{{ l.author }}</td>
+        <td>{{ l.location }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+<section>
+  <h2>{% translate "comments" %}</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{% translate "date" %}</th>
+        <th>{% translate "author" %}</th>
+        <th>{% translate "comment" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in comments %}
+      <tr>
+        <td>{{ c.created_at|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>{{ c.author }}</td>
+        <td>{{ c.text }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

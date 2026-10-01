@@ -1,7 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import (
+    GenericForeignKey,
+    GenericRelation
+)
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -46,6 +49,46 @@ class BaseModel(models.Model):
     @admin.display(description=_("active"), boolean=True)
     def is_active(self):
         return self.status == Status.ACTIVE
+
+
+class Comment(BaseModel):
+    text = models.TextField(
+        _("text"),
+        max_length=255,
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("author"),
+        on_delete=models.PROTECT,
+    )
+    created_at = models.DateTimeField(
+        _("created at"),
+        auto_now_add=True
+    )
+    changed_at = models.DateTimeField(
+        _("changed at"),
+        auto_now=True
+    )
+    entity = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        verbose_name=_("entity"),
+    )
+    object_id = models.PositiveIntegerField(
+        _("object id"),
+    )
+    content_object = GenericForeignKey("entity", "object_id")
+
+    def __str__(self):
+        max_size = 15
+        if len(self.text) < max_size:
+            return self.text
+
+        return self.text[:max_size] + "..."
+
+    @admin.display(description=_("object url"))
+    def object_url(self):
+        return generic_admin_object_url(self.entity, self.object_id)
 
 
 class Photo(BaseModel):
@@ -174,6 +217,11 @@ class InventoryItem(BaseModel):
         _("name"),
         max_length=255,
     )
+    comments = GenericRelation(
+        Comment,
+        content_type_field="entity",
+        related_query_name="inventory_item"
+    )
 
     def __str__(self):
         return self.name
@@ -206,43 +254,3 @@ class LocationHistory(BaseModel):
 
     def __str__(self):
         return self.location.name
-
-
-class Comment(BaseModel):
-    text = models.TextField(
-        _("text"),
-        max_length=255,
-    )
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name=_("author"),
-        on_delete=models.PROTECT,
-    )
-    created_at = models.DateTimeField(
-        _("created at"),
-        auto_now_add=True
-    )
-    changed_at = models.DateTimeField(
-        _("changed at"),
-        auto_now=True
-    )
-    entity = models.ForeignKey(
-        ContentType,
-        on_delete=models.CASCADE,
-        verbose_name=_("entity"),
-    )
-    object_id = models.PositiveIntegerField(
-        _("object id"),
-    )
-    content_object = GenericForeignKey("entity", "object_id")
-
-    def __str__(self):
-        max_size = 15
-        if len(self.text) < max_size:
-            return self.text
-
-        return self.text[:max_size] + "..."
-
-    @admin.display(description=_("object url"))
-    def object_url(self):
-        return generic_admin_object_url(self.entity, self.object_id)

@@ -34,6 +34,11 @@ urlpatterns = [
         name="owner-page"
     ),
     path(
+        f"{rp['owner']}/<int:owner_id>/<int:group_id>/<int:item_id>/",
+        v.item_page,
+        name="item-page"
+    ),
+    path(
         f"{rp['accounts']}/login/",
         auth_views.LoginView.as_view(redirect_authenticated_user=True),
         name="login"

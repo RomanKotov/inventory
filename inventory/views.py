@@ -30,3 +30,37 @@ def owner_page(request, owner_id):
         "inventory/owner.html",
         {"owner": owner, 'groups': groups}
     )
+
+
+def item_page(request, owner_id, group_id, item_id):
+    item = get_object_or_404(
+        m.InventoryItem.active.all(),
+        id=item_id,
+        group_id=group_id,
+        group__status=m.Status.ACTIVE,
+        group__owner_id=owner_id,
+        group__owner__status=m.Status.ACTIVE
+    )
+    tags = m.Tag.active.filter(inventoryitem=item)
+    locations = (
+        m.LocationHistory.active
+        .filter(inventory_item_id=item_id)
+        .order_by('-created_at')
+        .prefetch_related('location')
+    )
+    comments = (
+        m.Comment.active
+        .filter(inventory_item=item)
+        .order_by('created_at')
+        .prefetch_related('author')
+    )
+    return render(
+        request,
+        "inventory/item.html",
+        {
+            "item": item,
+            "tags": tags,
+            "locations": locations,
+            "comments": comments
+        }
+    )

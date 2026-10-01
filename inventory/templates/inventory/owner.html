@@ -21,7 +21,11 @@
   <tbody>
     {% for item in group.inventoryitem_set.all %}
     <tr>
-      <td>{{item}}</td>
+      <td>
+        <a href="{% url 'item-page' owner.id group.id item.id %}">
+          {{item}}
+        </a>
+      </td>
       <td class="d-none d-md-table-cell">{{item.inventory_number}}</td>
       <td class="d-none d-md-table-cell">{{item.serial_number}}</td>
       <td>{{item.quantity}}</td>
