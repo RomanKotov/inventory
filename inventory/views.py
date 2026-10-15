@@ -1,16 +1,17 @@
 from django.db.models import Prefetch, Q
+from django.http import HttpRequest
 from django.shortcuts import render, get_object_or_404
 import inventory.models as m
 
 
-def index(request):
+def index(request: HttpRequest):
     owners = m.InventoryOwner.active.all()
     return render(request, "inventory/home.html", {
         "owners": owners
     })
 
 
-def owner_page(request, owner_id):
+def owner_page(request: HttpRequest, owner_id: int):
     owner = get_object_or_404(m.InventoryOwner.active, pk=owner_id)
     search = request.GET.get("search", "")
     related_items = (
@@ -42,7 +43,9 @@ def owner_page(request, owner_id):
     )
 
 
-def item_page(request, owner_id, group_id, item_id):
+def item_page(
+        request: HttpRequest, owner_id: int, group_id: int, item_id: int
+):
     item = get_object_or_404(
         m.InventoryItem.active.all(),
         id=item_id,
