@@ -1,0 +1,16 @@
+{% load i18n %}
+<nav class="navbar navbar-light bg-body-secondary position-sticky top-0">
+  <div class="container-fluid">
+    <form class="ms-auto d-flex">
+      <input
+        class="flex-grow-1 form-control ms-2"
+        type="search"
+        name="search"
+        placeholder="{% translate 'Search' %}"
+        aria-label="{% translate 'Search' %}"
+        value="{{search}}"
+      >
+      <button class="btn btn-outline-success" type="submit">{% translate 'Search' %}</button>
+    </form>
+  </div>
+</nav>

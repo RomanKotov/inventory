@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import render, get_object_or_404
 import inventory.models as m
 
@@ -12,13 +12,19 @@ def index(request):
 
 def owner_page(request, owner_id):
     owner = get_object_or_404(m.InventoryOwner.active, pk=owner_id)
+    search = request.GET.get("search", "")
+    related_items = (
+        m.InventoryItem.active.filter(
+            Q(name__contains=search)
+            | Q(serial_number__contains=search)
+            | Q(inventory_number__contains=search)
+            | Q(quantity__contains=search)
+        )
+    )
     groups = (
         m.InventoryGroup.active.filter(owner_id=owner_id)
         .prefetch_related(
-            Prefetch(
-                "inventoryitem_set",
-                queryset=m.InventoryItem.active.all(),
-            ),
+            Prefetch("inventoryitem_set", queryset=related_items),
             Prefetch(
                 "inventoryitem_set__tags",
                 queryset=m.Tag.active.all()
@@ -28,7 +34,11 @@ def owner_page(request, owner_id):
     return render(
         request,
         "inventory/owner.html",
-        {"owner": owner, 'groups': groups}
+        {
+            "owner": owner,
+            "groups": groups,
+            "search": search
+        }
     )
 
 
