@@ -13,23 +13,28 @@ def index(request: HttpRequest):
 
 def owner_page(request: HttpRequest, owner_id: int):
     owner = get_object_or_404(m.InventoryOwner.active, pk=owner_id)
+    selected_tags = set(request.GET.getlist('tag'))
     search = request.GET.get("search", "")
+
+    tags_query = dict(tags__id__in=selected_tags) if selected_tags else {}
+
     related_items = (
-        m.InventoryItem.active.filter(
+        m.InventoryItem.active
+        .prefetch_related(
+            Prefetch("tags", queryset=m.Tag.active.all())
+        )
+        .filter(
             Q(name__contains=search)
             | Q(serial_number__contains=search)
             | Q(inventory_number__contains=search)
-            | Q(quantity__contains=search)
+            | Q(quantity__contains=search),
+            **tags_query
         )
     )
     groups = (
         m.InventoryGroup.active.filter(owner_id=owner_id)
         .prefetch_related(
             Prefetch("inventoryitem_set", queryset=related_items),
-            Prefetch(
-                "inventoryitem_set__tags",
-                queryset=m.Tag.active.all()
-            )
         )
     )
     return render(
@@ -38,7 +43,9 @@ def owner_page(request: HttpRequest, owner_id: int):
         {
             "owner": owner,
             "groups": groups,
-            "search": search
+            "search": search,
+            "tags": m.Tag.active.all(),
+            "selected_tags": selected_tags
         }
     )
 

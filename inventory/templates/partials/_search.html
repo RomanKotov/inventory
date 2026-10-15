@@ -1,16 +1,64 @@
 {% load i18n %}
-<nav class="navbar navbar-light bg-body-secondary position-sticky top-0">
-  <div class="container-fluid">
-    <form class="ms-auto d-flex">
-      <input
-        class="flex-grow-1 form-control ms-2"
-        type="search"
-        name="search"
-        placeholder="{% translate 'Search' %}"
-        aria-label="{% translate 'Search' %}"
-        value="{{search}}"
+<div class="accordion position-sticky top-0 mb-3 mt-1" id="searchAccordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="searchMenu">
+      <button
+        class="accordion-button bg-body-secondary"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseMenu"
+        aria-expanded="false"
+        aria-controls="collapseMenu"
       >
-      <button class="btn btn-outline-success" type="submit">{% translate 'Search' %}</button>
-    </form>
+        <span class="me-2">
+          {% if selected_tags|length %}
+          {% translate 'Selected tag(s)' %}:
+          <b>{{selected_tags|length}}</b>
+          {% endif %}
+        </span>
+        <span class="mw-50 text-truncate">
+          {% translate 'Search' %}
+          {% if search %}
+          <b>"{{search}}"</b>
+          {% endif %}
+        </span>
+      </button>
+    </h2>
+    <div id="collapseMenu" class="accordion-collapse collapse" aria-labelledby="searchMenu" data-bs-parent="#searchAccordion">
+      <div class="accordion-body">
+        <div class="container-fluid">
+          <form class="ms-auto d-flex flex-column">
+            <section class="d-flex mb-3">
+              <input
+                class="flex-grow-1 form-control"
+                type="search"
+                name="search"
+                placeholder="{% translate 'Search' %}"
+                aria-label="{% translate 'Search' %}"
+                value="{{search}}"
+              >
+              <button class="btn btn-success ms-1" type="submit">{% translate 'Search' %}</button>
+            </section>
+            <section class="d-flex flex-wrap">
+            {% for tag in tags %}
+              <div class="form-check mw-25 me-5 me-md-auto">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="tag"
+                  value="{{tag.id}}"
+                  id="tag-{{tag.id}}"
+                  {% if tag.id|stringformat:"i" in selected_tags %}checked{% endif %}
+                >
+                <label class="form-check-label" for="tag-{{tag.id}}">
+                  <span class="badge text-bg-{{tag.type}}">{{tag}}</span>
+                </label>
+              </div>
+            {% endfor %}
+            </section>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-</nav>
+</div>
