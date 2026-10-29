@@ -23,18 +23,22 @@
         <div class="container-fluid">
           <form
             class="ms-auto d-flex flex-column"
-            hx-get=""
+            hx-get="{{request.path}}"
             hx-trigger="change, input changed delay:200ms from: input"
             hx-target="#table-results"
+            hx-replace-url="true"
           >
-            <input
-              class="form-control mb-3"
-              type="search"
-              name="search"
-              placeholder="{% translate 'Search' %}"
-              aria-label="{% translate 'Search' %}"
-              value="{{search}}"
-            >
+          <section class="d-flex mb-3">
+              <input
+                class="flex-grow-1 form-control"
+                type="search"
+                name="search"
+                placeholder="{% translate 'Search' %}"
+                aria-label="{% translate 'Search' %}"
+                value="{{search}}"
+              >
+              <button class="btn btn-success ms-1" type="submit">{% translate 'Search' %}</button>
+            </section>
             <section class="d-flex flex-wrap">
             {% for tag in tags %}
               <div class="form-check mw-25 me-5 me-md-auto">
