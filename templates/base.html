@@ -18,6 +18,7 @@
   hx-boost:inherited="true"
   class="container container-fluid"
   hx-headers:inherited='{"x-csrftoken": "{{ csrf_token }}"}'
+  hx-indicator:inherited="#global-loader"
 >
   {% block navigation %}
     {% include "partials/_navbar.html" %}
@@ -25,5 +26,6 @@
   {% bootstrap_messages %}
   {% block content %}{% endblock %}
   {% bootstrap_javascript %}
+  <div id="global-loader" class="spinner-border" role="status"></div>
 </body>
 </html>

@@ -37,9 +37,14 @@ def owner_page(request: HttpRequest, owner_id: int):
             Prefetch("inventoryitem_set", queryset=related_items),
         )
     )
+
+    template = "inventory/owner.html"
+    if request.htmx.request_type == 'partial':
+        template = "partials/_owner-table-results.html"
+
     return render(
         request,
-        "inventory/owner.html",
+        template,
         {
             "owner": owner,
             "groups": groups,

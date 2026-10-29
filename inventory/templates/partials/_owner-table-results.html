@@ -1,0 +1,39 @@
+{% for group in groups %}
+{% if group.inventoryitem_set.count > 0 %}
+<div class="table-responsive mb-5">
+<h2>
+  <span class="badge text-bg-secondary">{{group}}</span>
+</h2>
+<table class="table table-bordered caption-top">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th class="d-none d-md-table-cell">inventory_number</th>
+      <th class="d-none d-md-table-cell">serial_number</th>
+      <th>quantity</th>
+      <th>tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in group.inventoryitem_set.all %}
+    <tr>
+      <td>
+        <a href="{% url 'item-page' owner.id group.id item.id %}">
+          {{item}}
+        </a>
+      </td>
+      <td class="d-none d-md-table-cell">{{item.inventory_number|default:""}}</td>
+      <td class="d-none d-md-table-cell">{{item.serial_number|default:""}}</td>
+      <td>{{item.quantity}}</td>
+      <td>
+        {% for tag in item.tags.all %}
+        <span class="badge text-bg-{{tag.type}}">{{tag}}</span>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+{% endfor %}

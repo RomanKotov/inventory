@@ -10,35 +10,31 @@
         aria-expanded="false"
         aria-controls="collapseMenu"
       >
-        <span class="me-2">
-          {% if selected_tags|length %}
-          {% translate 'Selected tag(s)' %}:
-          <b>{{selected_tags|length}}</b>
-          {% endif %}
-        </span>
-        <span class="mw-50 text-truncate">
-          {% translate 'Search' %}
-          {% if search %}
-          <b>"{{search}}"</b>
-          {% endif %}
-        </span>
+        <span class="mw-50 text-truncate">{% translate 'Search' %}</span>
       </button>
     </h2>
-    <div id="collapseMenu" class="accordion-collapse collapse" aria-labelledby="searchMenu" data-bs-parent="#searchAccordion">
+    <div
+      id="collapseMenu"
+      class="accordion-collapse collapse"
+      aria-labelledby="searchMenu"
+      data-bs-parent="#searchAccordion"
+    >
       <div class="accordion-body">
         <div class="container-fluid">
-          <form class="ms-auto d-flex flex-column">
-            <section class="d-flex mb-3">
-              <input
-                class="flex-grow-1 form-control"
-                type="search"
-                name="search"
-                placeholder="{% translate 'Search' %}"
-                aria-label="{% translate 'Search' %}"
-                value="{{search}}"
-              >
-              <button class="btn btn-success ms-1" type="submit">{% translate 'Search' %}</button>
-            </section>
+          <form
+            class="ms-auto d-flex flex-column"
+            hx-get=""
+            hx-trigger="change, input changed delay:200ms from: input"
+            hx-target="#table-results"
+          >
+            <input
+              class="form-control mb-3"
+              type="search"
+              name="search"
+              placeholder="{% translate 'Search' %}"
+              aria-label="{% translate 'Search' %}"
+              value="{{search}}"
+            >
             <section class="d-flex flex-wrap">
             {% for tag in tags %}
               <div class="form-check mw-25 me-5 me-md-auto">

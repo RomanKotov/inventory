@@ -23,3 +23,17 @@ html[data-theme="dark"] .theme-toggle .theme-label-when-dark {
 html[data-theme="light"] .theme-toggle .theme-label-when-light {
   display: block;
 }
+
+#global-loader {
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  top: 0.5em;
+  left: 0.5em;
+}
+
+#global-loader.htmx-request {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 250ms ease-in;
+}
