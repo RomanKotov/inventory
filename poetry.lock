@@ -128,6 +128,22 @@ files = [
 django = ">=4.2"
 
 [[package]]
+name = "django-htmx"
+version = "1.29.0"
+description = "Extensions for using Django with htmx."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_htmx-1.29.0-py3-none-any.whl", hash = "sha256:0ec5be1645ed71e6787bd75e0250624f00274ac3bb1730f07b6629a95688929b"},
+    {file = "django_htmx-1.29.0.tar.gz", hash = "sha256:337dfa35b8da13fd68bf968f2b9cc9a4144a4e71f06c204d7ff10f7343988102"},
+]
+
+[package.dependencies]
+asgiref = ">=3.6"
+django = ">=5.2"
+
+[[package]]
 name = "executing"
 version = "2.2.1"
 description = "Get the currently executing AST node of a frame, and other information"
@@ -571,4 +587,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14"
-content-hash = "e02953b3d87bf68f5f6c3dbcfdd2db28460bde66b39365936113988507164d4d"
+content-hash = "c86a52e4d8128eb508d0fe07e00de68d2595c2d2e5fc2102a4757283b5d38303"

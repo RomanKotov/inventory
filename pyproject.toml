@@ -10,7 +10,8 @@ requires-python = ">=3.14"
 dependencies = [
     "django (>=6.1,<7.0)",
     "pillow (>=12.3.0,<13.0.0)",
-    "django-bootstrap5 (>=26.2,<27.0)"
+    "django-bootstrap5 (>=26.2,<27.0)",
+    "django-htmx (>=1.29.0,<2.0.0)"
 ]
 
 [dependency-groups]
