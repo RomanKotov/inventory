@@ -37,3 +37,11 @@ html[data-theme="light"] .theme-toggle .theme-label-when-light {
   visibility: visible;
   transition: opacity 250ms ease-in;
 }
+
+.tag-selector {
+  opacity: 0.4;
+}
+
+.tag-selector:has(input[type=checkbox]:checked) {
+  opacity: 1;
+}

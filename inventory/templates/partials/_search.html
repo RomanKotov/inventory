@@ -41,7 +41,7 @@
             </section>
             <section class="d-flex flex-wrap">
             {% for tag in tags %}
-              <div class="form-check mw-25 me-5 me-md-auto">
+              <label class="form-check-label btn btn-{{tag.type}} m-1 btn-sm tag-selector" type=button for="tag-{{tag.id}}">
                 <input
                   class="form-check-input"
                   type="checkbox"
@@ -50,10 +50,8 @@
                   id="tag-{{tag.id}}"
                   {% if tag.id|stringformat:"i" in selected_tags %}checked{% endif %}
                 >
-                <label class="form-check-label" for="tag-{{tag.id}}">
-                  <span class="badge text-bg-{{tag.type}}">{{tag}}</span>
-                </label>
-              </div>
+                {{tag}}
+              </label>
             {% endfor %}
             </section>
           </form>
